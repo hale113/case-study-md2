@@ -6,7 +6,6 @@ var computer_1 = require("../model/computer");
 var computerManagement_1 = require("../servike/computerManagement");
 var serviceManagement_1 = require("../servike/serviceManagement");
 var dailyIncome_1 = require("../model/dailyIncome");
-var rl = require("readline-sync");
 var listAccountManagement = new accountManagement_1.AccountManagement();
 var listComputerManagement = new computerManagement_1.ComputerManagement();
 var listServiceManagement = new serviceManagement_1.ServiceManagement();
@@ -16,31 +15,18 @@ var priceService = 0;
 var currentDate = new Date();
 var dailyIncome = new dailyIncome_1.DailyIncome();
 dailyIncome.date = "".concat(currentDate.getDate(), "-").concat(currentDate.getMonth() + 1, "-").concat(currentDate.getFullYear());
+dailyIncome.income = 0;
 function account() {
     var menu = "\n    ---Phan mem tinh tien---\n    1. Dang ky\n    2. Dang nhap\n    0. Dang xuat\n    ";
     var choice;
     do {
         console.log(menu);
         choice = +input.question("Lua chon cua ban: ");
-        var temp = 0;
-        var regex = /^[1-3]$/;
-        while (temp < 1 || temp > 3) {
-            var chooseUser = rl.question("Choose your function:");
-            if (regex.test(chooseUser)) {
-                temp = +(chooseUser);
-            }
-            else {
-                temp = -1;
-            }
-            if (temp < 1 || temp > 3) {
-                console.log("Please choose between 1 and 3");
-            }
-        }
+        var name1 = input.question("Tao ten nguoi dung: ");
+        var pass1 = input.question("Tao mat khau (2-5 ky tu chu va 2-5 ky tu so): ");
         switch (choice) {
             case 1:
                 var id1 = +input.question("nhap id nguoi dung: ");
-                var name1 = input.question("Tao ten nguoi dung: ");
-                var pass1 = input.question("Tao mat khau (2-5 ky tu chu va 2-5 ky tu so): ");
                 var user = new account_1.Account(id1, name1, pass1);
                 listAccountManagement.add(user);
                 break;
@@ -82,7 +68,7 @@ function adminMenu() {
                 openComputer();
                 break;
             case 4:
-                offComputer();
+                dailyIncome.income += offComputer();
                 break;
             case 5:
                 editComputer();
@@ -247,6 +233,7 @@ function offComputer() {
             var totalMoney_1 = totalTime * price + priceService;
             console.log("thoi gian sd: " + totalTime + " s ");
             console.log("tong tien: " + totalMoney_1 + "USD");
+            return totalMoney_1;
         }
     }
     return dailyIncome.income += totalMoney;
@@ -289,6 +276,6 @@ function addAccount() {
 }
 function turnover() {
     console.log("thu nhap den thoi diem hien tai la: ");
-    console.log("".concat(dailyIncome.date, ":$").concat(dailyIncome.income));
+    console.log("".concat(dailyIncome.date, ":$").concat(dailyIncome.income, " ") + "USD");
 }
 account();

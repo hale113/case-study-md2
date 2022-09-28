@@ -3,9 +3,7 @@ import {AccountManagement} from "../servike/accountManagement";
 import {Computer} from "../model/computer";
 import {ComputerManagement} from "../servike/computerManagement";
 import {ServiceManagement} from "../servike/serviceManagement";
-import {Service} from "../model/service";
 import {DailyIncome} from "../model/dailyIncome";
-
 let listAccountManagement: AccountManagement = new AccountManagement();
 let listComputerManagement: ComputerManagement = new ComputerManagement();
 let listServiceManagement: ServiceManagement = new ServiceManagement();
@@ -15,22 +13,22 @@ let priceService = 0;
 let currentDate = new Date();
 let dailyIncome = new DailyIncome();
 dailyIncome.date = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+dailyIncome.income = 0;
 
 function account() {
     let menu = `
     ---Phan mem tinh tien---
     1. Dang ky
-    2. Dang nhap
+    2. Dang  nhap
     0. Dang xuat
     `
-
     let choice: number;
     do {
         console.log(menu)
         choice = +input.question("Lua chon cua ban: ");
         switch (choice) {
             case 1:
-                let id1 = +input.question("nhap id nguoi dung: ")
+                let id1 = +input.question("nhap id nguoi dung: ");
                 let name1 = input.question("Tao ten nguoi dung: ");
                 let pass1 = input.question("Tao mat khau (2-5 ky tu chu va 2-5 ky tu so): ");
                 let user = new Account(id1, name1, pass1);
@@ -45,13 +43,13 @@ function account() {
                 if (userName == name1 && userPass == pass1) {
                     adminMenu();
                 } else {
-                    console.log("id hoac ten dang nhap sai, nhap lai di!!")
+                    console.log("id hoac ten dang nhap sai, nhap lai di!!");
                 }
                 break;
             case 0:
                 break;
             default:
-                console.log("sai roi nhap lai di")
+                console.log("sai roi nhap lai di");
                 break;
         }
     } while (choice != 0);
@@ -86,10 +84,10 @@ function adminMenu() {
                 openComputer();
                 break;
             case 4:
-                offComputer();
+                dailyIncome.income += offComputer();
                 break;
             case 5:
-                editComputer()
+                editComputer();
                 break;
             case 6:
                 deleteComputer();
@@ -106,7 +104,7 @@ function adminMenu() {
             case 0:
                 break;
             default:
-                console.log("sai rôi nhap lai di")
+                console.log("sai rôi nhap lai di");
                 break;
         }
     } while (choice != 0)
@@ -123,9 +121,9 @@ function addComputer() {
         let statusAdd = input.question("nhap vao trang thai may: ");
         listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
     } else if (idAdd >= 0) {
-        console.log("id da ton tai vui long nhap lai!")
+        console.log("id da ton tai vui long nhap lai!");
     } else {
-        console.log("id khong thoa man, vui long nhap lai")
+        console.log("id khong thoa man, vui long nhap lai");
     }
 
 
@@ -134,7 +132,7 @@ function addComputer() {
 function deleteComputer() {
     let idDelete = +input.question("nhap vao id may muon xoa: ");
     if (listComputerManagement.findById(idDelete) == -1) {
-        console.log("id khong ton tai")
+        console.log("id khong ton tai");
     } else {
         let menuDelete = `
     Ban co muon xoa khong ?
@@ -154,14 +152,14 @@ function deleteComputer() {
                 case 0:
                     break;
             }
-        } while (choice != 0)
+        } while (choice != 0);
     }
 }
 
 function editComputer() {
     let idEdit = +input.question("nhap vao id may muon sua: ");
     if (listComputerManagement.findById(idEdit) == -1) {
-        console.log("id muon sua khong ton tai")
+        console.log("id muon sua khong ton tai");
     } else {
         let nameEdit = input.question(" vao ten moi: ");
         let statusEdit = input.question("nhap trang thai moi: ");
@@ -187,13 +185,13 @@ function openComputer() {
                     console.log("id khong ton tai!");
                 } else {
                     let index = listComputerManagement.findById(idOpen);
-                    if (listComputerManagement.listComputer[index].status == "off"){
+                    if (listComputerManagement.listComputer[index].status == "off") {
                         listComputerManagement.listComputer[index].status = "on";
                         listComputerManagement.listComputer[index].time.startTime = Date.now();
                         showComputer();
                         console.log("da mo may");
-                    }else {
-                        console.log("may dang hoat dong")
+                    } else {
+                        console.log("may dang hoat dong");
                     }
                 }
                 break;
@@ -224,7 +222,7 @@ function openComputer() {
                                 }
                             }
                         } else {
-                            console.log("id khong ton tai!")
+                            console.log("id khong ton tai!");
                         }
                     }
                     return dailyIncome.income += priceService;
@@ -233,17 +231,17 @@ function openComputer() {
             case 0:
                 break;
             default:
-                console.log("nhap sai roi nhap lai di")
+                console.log("nhap sai roi nhap lai di");
                 break;
         }
-    } while (choice != 0)
+    } while (choice != 0);
 }
 
 function offComputer() {
     let totalMoney = 0;
     let idOff = +input.question("nhap vao id may muon dong: ");
     if (listComputerManagement.findById(idOff) == -1) {
-        console.log("id khong ton tai! vui long nhap lai!!")
+        console.log("id khong ton tai! vui long nhap lai!!");
     } else {
         let index1 = listComputerManagement.findById(idOff);
         if (listComputerManagement.listComputer[index1].status == "off") {
@@ -256,10 +254,11 @@ function offComputer() {
             let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 1000;
             let totalMoney = totalTime * price + priceService;
             console.log("thoi gian sd: " + totalTime + " s ");
-            console.log("tong tien: " + totalMoney +  "USD");
+            console.log("tong tien: " + totalMoney + "USD");
+            return totalMoney;
         }
     }
-  return  dailyIncome.income += totalMoney;
+    return dailyIncome.income += totalMoney;
 
 }
 
@@ -292,11 +291,11 @@ function addAccount() {
             case 2:
                 let id2 = +input.question("nhap id tk muon sua: ");
                 let name2 = input.question("Ten moi: ");
-                let pass2 = input.question("Mat khau moi: ")
+                let pass2 = input.question("Mat khau moi: ");
                 listAccountManagement.edit(id2, new Account(id2, name2, pass2));
                 break;
             case 3:
-                let id3 = +input.question("nhap id muon xoa: ")
+                let id3 = +input.question("nhap id muon xoa: ");
                 listAccountManagement.delete(id3);
                 break;
             case 4:
@@ -305,13 +304,13 @@ function addAccount() {
             case 0:
                 break;
         }
-    } while (choice1 != 0)
+    } while (choice1 != 0);
 }
 
 function turnover() {
     console.log("thu nhap den thoi diem hien tai la: ");
-    console.log(`${dailyIncome.date}:$${dailyIncome.income}`)
+    console.log(`${dailyIncome.date}:$${dailyIncome.income} `+"USD");
 }
 
- account();
+account();
 
