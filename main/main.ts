@@ -17,39 +17,39 @@ dailyIncome.income = 0;
 
 function account() {
     let menu = `
-    ---Phan mem tinh tien---
-    1. Dang ky
-    2. Dang  nhap
-    0. Dang xuat
+    ====Billing Software====
+    1. Register
+    2. Login
+    0. Log out
     `
     let choice: number;
     do {
         console.log(menu)
-        choice = +input.question("Lua chon cua ban: ");
+        choice = +input.question("Enter selection: ");
         switch (choice) {
             case 1:
-                let id1 = +input.question("nhap id nguoi dung: ");
-                let name1 = input.question("Tao ten nguoi dung: ");
-                let pass1 = input.question("Tao mat khau (2-5 ky tu chu va 2-5 ky tu so): ");
+                let id1 = +input.question("Enter new user id: ");
+                let name1 = input.question("Enter new user name: ");
+                let pass1 = input.question("Enter new user pass: ");
                 let user = new Account(id1, name1, pass1);
                 listAccountManagement.add(user);
                 break;
             case 2:
-                let userName = input.question("nhap ten nguoi dung: ");
-                let userPass = input.question("nhap mat khau: ");
+                let userName = input.question("Enter user name: ");
+                let userPass = input.question("Enter user pass: ");
                 if (userName == "ha" && userPass == "ha12345") {
                     adminMenu();
                 }
                 if (userName == name1 && userPass == pass1) {
                     adminMenu();
                 } else {
-                    console.log("id hoac ten dang nhap sai, nhap lai di!!");
+                    console.log("Wrong username or id, re-enter!!");
                 }
                 break;
             case 0:
                 break;
             default:
-                console.log("sai roi nhap lai di");
+                console.log("Wrong, please re-enter");
                 break;
         }
     } while (choice != 0);
@@ -57,22 +57,22 @@ function account() {
 
 function adminMenu() {
     let menu1 = `
-    ------Menu Quan Ly-------
-    1. Hien thi danh sach may co trong quan
-    2. Them mot may moi vao danh sach
-    3. Mo may va them dich vu
-    4. Dong may va tinh tien
-    5. Sua doi thong tin cua may
-    6. Xoa mot may khoi danh sach
-    7. Chinh sua gia tien 
-    8. Quan li tai khoan dang nhap
-    9. Doanh thu
-    0. Thoat
+    ------Management menu------
+    1. Show list of computers
+    2. Add a new machine
+    3. Turn on the machine and Add a service
+    4. Close the machine and Pay
+    5. Edit machine information
+    6. Remove a machine from the list
+    7. Edit price 
+    8. Account Management
+    9. Turnover
+    0. Exit
     `
     let choice: number;
     do {
         console.log(menu1);
-        choice = +input.question("nhap lua chon cua ban: ");
+        choice = +input.question("Enter selection: ");
         switch (choice) {
             case 1:
                 showComputer();
@@ -104,7 +104,7 @@ function adminMenu() {
             case 0:
                 break;
             default:
-                console.log("sai rôi nhap lai di");
+                console.log("Wrong then re-enter");
                 break;
         }
     } while (choice != 0)
@@ -115,39 +115,39 @@ function showComputer() {
 }
 
 function addComputer() {
-    let idAdd = +input.question("nhap id may moi: ");
+    let idAdd = +input.question("Enter new device id: ");
     if (listComputerManagement.findById(idAdd) == -1 && idAdd >= 0) {
-        let nameAdd = input.question("nhap vao ten may: ");
-        let statusAdd = input.question("nhap vao trang thai may: ");
+        let nameAdd = input.question("Enter new device name: ");
+        let statusAdd = input.question("Enter machine status: ");
         listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
     } else if (idAdd >= 0) {
-        console.log("id da ton tai vui long nhap lai!");
+        console.log("Id already exists, please re-enter!");
     } else {
-        console.log("id khong thoa man, vui long nhap lai");
+        console.log("Id is not satisfied, please re-enter!");
     }
 
 
 }
 
 function deleteComputer() {
-    let idDelete = +input.question("nhap vao id may muon xoa: ");
+    let idDelete = +input.question("Enter the id you want to delete: ");
     if (listComputerManagement.findById(idDelete) == -1) {
-        console.log("id khong ton tai");
+        console.log("Id does not exist");
     } else {
         let menuDelete = `
-    Ban co muon xoa khong ?
-    1. xoa 
-    0. thoat
+    You may want to delete ?
+    1. Delete
+    0. Exit
     `
         let choice: number;
         do {
             console.log(menuDelete);
-            choice = +input.question("nhap lua chon cua ban: ");
+            choice = +input.question("Enter selection: ");
             switch (choice) {
                 case 1:
                     listComputerManagement.delete(idDelete);
                     showComputer();
-                    console.log("Da xoa thanh cong");
+                    console.log("Deleted successfully!");
                     break;
                 case 0:
                     break;
@@ -157,12 +157,12 @@ function deleteComputer() {
 }
 
 function editComputer() {
-    let idEdit = +input.question("nhap vao id may muon sua: ");
+    let idEdit = +input.question("Enter the id you want to edit: ");
     if (listComputerManagement.findById(idEdit) == -1) {
-        console.log("id muon sua khong ton tai");
+        console.log("The id you want to fix does not exist!");
     } else {
-        let nameEdit = input.question(" vao ten moi: ");
-        let statusEdit = input.question("nhap trang thai moi: ");
+        let nameEdit = input.question(" Enter a new name: ");
+        let statusEdit = input.question("Enter a new status: ");
         listComputerManagement.edit(idEdit, new Computer(idEdit, nameEdit, statusEdit));
     }
 }
@@ -170,42 +170,42 @@ function editComputer() {
 function openComputer() {
 
     let menu = `
-    1. Mo may
-    2. Them dich vu
-    0. Thoat
+    1. Open machine
+    2. More services
+    0. Exit
     `
     let choice: number;
     do {
         console.log(menu);
-        choice = +input.question("nhap lua chon cua ban");
+        choice = +input.question("Enter selection: ");
         switch (choice) {
             case 1:
-                let idOpen = +input.question("nhap vao id may muon mo");
+                let idOpen = +input.question("Enter the device id you want to open: ");
                 if (listComputerManagement.findById(idOpen) == -1) {
-                    console.log("id khong ton tai!");
+                    console.log("Id does not exist!");
                 } else {
                     let index = listComputerManagement.findById(idOpen);
                     if (listComputerManagement.listComputer[index].status == "off") {
                         listComputerManagement.listComputer[index].status = "on";
                         listComputerManagement.listComputer[index].time.startTime = Date.now();
                         showComputer();
-                        console.log("da mo may");
+                        console.log("The device has been opened!");
                     } else {
-                        console.log("may dang hoat dong");
+                        console.log("Machine is working!");
                     }
                 }
                 break;
             case 2:
-                let idAdd = +input.question("nhap id may muon them dv: ");
+                let idAdd = +input.question("Machine id add service: ");
                 if (listComputerManagement.findById(idAdd) == -1) {
-                    console.log("id khong ton tai!");
+                    console.log("Id does not exist!");
                 } else {
                     let index1 = listComputerManagement.findById(idAdd);
                     if (listComputerManagement.listComputer[index1].status == "off") {
-                        console.log("may khong hoat dong");
+                        console.log("Machine not working!");
                     } else if (listComputerManagement.listComputer[index1].status == "on") {
                         console.log(listServiceManagement);
-                        let idService = +input.question("nhap id dv: ");
+                        let idService = +input.question("Enter service id: ");
                         if (idService >= 1 && idService <= 4) {
                             let index2 = listServiceManagement.findById(idService);
                             listComputerManagement.listComputer[index1].service.push(listServiceManagement.listService[index2]);
@@ -214,7 +214,7 @@ function openComputer() {
                                     console.log(listComputerManagement.listComputer[index1].service);
                                     for (let j = 0; j < listServiceManagement.listService.length; j++) {
                                         if (j == index2) {
-                                            console.log(listServiceManagement.listService[index2].nameService + " gia:" + listServiceManagement.listService[index2].price);
+                                            console.log(listServiceManagement.listService[index2].nameService + " Price:" + listServiceManagement.listService[index2].price);
                                             priceService += listServiceManagement.listService[index2].price;
                                             return priceService;
                                         }
@@ -222,7 +222,7 @@ function openComputer() {
                                 }
                             }
                         } else {
-                            console.log("id khong ton tai!");
+                            console.log("Id does not exist!");
                         }
                     }
                     return dailyIncome.income += priceService;
@@ -231,7 +231,7 @@ function openComputer() {
             case 0:
                 break;
             default:
-                console.log("nhap sai roi nhap lai di");
+                console.log("Entered wrong, enter again");
                 break;
         }
     } while (choice != 0);
@@ -239,22 +239,22 @@ function openComputer() {
 
 function offComputer() {
     let totalMoney = 0;
-    let idOff = +input.question("nhap vao id may muon dong: ");
+    let idOff = +input.question("Enter the id of the device you want to close: ");
     if (listComputerManagement.findById(idOff) == -1) {
-        console.log("id khong ton tai! vui long nhap lai!!");
+        console.log("Id does not exist, please re-enter!!");
     } else {
         let index1 = listComputerManagement.findById(idOff);
         if (listComputerManagement.listComputer[index1].status == "off") {
-            console.log("may chua hoat dong");
+            console.log("Machine not working!");
         } else if (listComputerManagement.listComputer[index1].status == "on") {
             listComputerManagement.listComputer[index1].status = "off";
             listComputerManagement.listComputer[index1].time.endTime = Date.now();
             showComputer();
-            console.log("da dong may: " + (index1 + 1));
+            console.log("Closed the second machine: " + (index1 + 1));
             let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 1000;
             let totalMoney = totalTime * price + priceService;
-            console.log("thoi gian sd: " + totalTime + " s ");
-            console.log("tong tien: " + totalMoney + "USD");
+            console.log("Used Time: " + totalTime + " s ");
+            console.log("Total amount: " + totalMoney + "USD");
             return totalMoney;
         }
     }
@@ -262,40 +262,40 @@ function offComputer() {
 
 }
 
-
 function priceEdit() {
-    let newPrice = +input.question("nhap gia theo giay: ");
+    let newPrice = +input.question("New price: ");
     price = newPrice;
 }
 
 function addAccount() {
     let menuAccount = `
-    1. Them tai khoan
-    2. Sua tai khoan
-    3. Xoa tai khoan
-    4. Hien thi toan bo tai khoan quan ly
-    0. Thoat
+    ------Account-----
+    1. Add account
+    2. Edit account
+    3. Delete account
+    4. Show list of accounts
+    0. Exit
     `
     let choice1: number;
     do {
         console.log(menuAccount);
-        choice1 = +input.question("lua chon cua ban: ");
+        choice1 = +input.question("Enter selection: ");
         switch (choice1) {
             case 1:
-                let id1 = +input.question("nhap id nguoi dung: ")
-                let name1 = input.question("Tao ten nguoi dung: ");
-                let pass1 = input.question("Tao mat khau (2-5 ky tu chu va 2-5 ky tu so): ");
+                let id1 = +input.question("Enter user id: ")
+                let name1 = input.question("Enter user name: ");
+                let pass1 = input.question("Enter user pass: ");
                 let user = new Account(id1, name1, pass1);
                 listAccountManagement.add(user);
                 break;
             case 2:
-                let id2 = +input.question("nhap id tk muon sua: ");
-                let name2 = input.question("Ten moi: ");
-                let pass2 = input.question("Mat khau moi: ");
+                let id2 = +input.question("The account id you want to edit: ");
+                let name2 = input.question("New name: ");
+                let pass2 = input.question("New pass: ");
                 listAccountManagement.edit(id2, new Account(id2, name2, pass2));
                 break;
             case 3:
-                let id3 = +input.question("nhap id muon xoa: ");
+                let id3 = +input.question("The account id you want to delete: ");
                 listAccountManagement.delete(id3);
                 break;
             case 4:
@@ -308,7 +308,7 @@ function addAccount() {
 }
 
 function turnover() {
-    console.log("thu nhap den thoi diem hien tai la: ");
+    console.log("Revenue up to now: ");
     console.log(`${dailyIncome.date}:$${dailyIncome.income} `+"USD");
 }
 

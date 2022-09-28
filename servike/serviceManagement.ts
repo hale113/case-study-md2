@@ -8,7 +8,6 @@ export class ServiceManagement implements Manager<Service>{
         let service2 = new Service(2,"bim bim nho ", 15000);
         let service3 = new Service(3,"sting ",15000);
         let service4 = new Service(4,"bim bim co lon ",20000);
-
         this.listService.push(service1,service2,service3,service4);
     }
     add(t: Service): void {
