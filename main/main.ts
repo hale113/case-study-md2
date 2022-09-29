@@ -8,7 +8,7 @@ let listAccountManagement: AccountManagement = new AccountManagement();
 let listComputerManagement: ComputerManagement = new ComputerManagement();
 let listServiceManagement: ServiceManagement = new ServiceManagement();
 let input = require('readline-sync');
-let price = 10;
+let price = 250;
 let priceService = 0;
 let currentDate = new Date();
 let dailyIncome = new DailyIncome();
@@ -120,13 +120,16 @@ function addComputer() {
         let nameAdd = input.question("Enter new device name: ");
         let statusAdd = input.question("Enter machine status: ");
         listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
+        let index1 = listComputerManagement.findById(idAdd);
+        if (listComputerManagement.listComputer[index1].status =="on"){
+            listComputerManagement.listComputer[index1].time.startTime = Date.now();
+            showComputer();
+        }
     } else if (idAdd >= 0) {
         console.log("Id already exists, please re-enter!");
     } else {
         console.log("Id is not satisfied, please re-enter!");
     }
-
-
 }
 
 function deleteComputer() {
@@ -251,10 +254,10 @@ function offComputer() {
             listComputerManagement.listComputer[index1].time.endTime = Date.now();
             showComputer();
             console.log("Closed the second machine: " + (index1 + 1));
-            let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 1000;
+            let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 60000;
             let totalMoney = totalTime * price + priceService;
-            console.log("Used Time: " + totalTime + " s ");
-            console.log("Total amount: " + totalMoney + "USD");
+            console.log("Used Time: " + totalTime + " minute ");
+            console.log("Total amount: " + totalMoney + "VND");
             return totalMoney;
         }
     }
