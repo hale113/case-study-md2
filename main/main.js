@@ -14,23 +14,24 @@ var price = 250;
 var priceService = 0;
 var currentDate = new Date();
 var dailyIncome = new dailyIncome_1.DailyIncome();
-dailyIncome.date = "".concat(currentDate.getDate(), "-").concat(currentDate.getMonth() + 1, "-").concat(currentDate.getFullYear());
+dailyIncome.date = "".concat(currentDate.getDate(), "/").concat(currentDate.getMonth() + 1, "/").concat(currentDate.getFullYear());
 dailyIncome.income = 0;
 function account() {
     var menu = "\n    ====Billing Software====\n    1. Register\n    2. Login\n    0. Log out\n    ";
     var choice;
     do {
         console.log(menu);
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 var id1 = +input.question("Enter new user id: ");
                 var name1 = input.question("Enter new user name: ");
                 var pass1 = input.question("Enter new user pass: ");
                 var user = new account_1.Account(id1, name1, pass1);
                 listAccountManagement.add(user);
+                console.log("added account! ");
                 break;
-            case 2:
+            case "2":
                 var userName = input.question("Enter user name: ");
                 var userPass = input.question("Enter user pass: ");
                 if (userName == "ha" && userPass == "ha12345") {
@@ -40,58 +41,58 @@ function account() {
                     adminMenu();
                 }
                 else {
-                    console.log("Wrong username or id, re-enter!!");
+                    console.log("Wrong username or pass, re-enter!!");
                 }
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Wrong, please re-enter");
                 break;
         }
-    } while (choice != 0);
+    } while (choice != "0");
 }
 function adminMenu() {
     var menu1 = "\n    ------Management menu------\n    1. Show list of computers\n    2. Add a new machine\n    3. Turn on the machine and Add a service\n    4. Close the machine and Pay\n    5. Edit machine information\n    6. Remove a machine from the list\n    7. Edit price \n    8. Account Management\n    9. Turnover\n    0. Exit\n    ";
     var choice;
     do {
         console.log(menu1);
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 showComputer();
                 break;
-            case 2:
+            case "2":
                 addComputer();
                 break;
-            case 3:
+            case "3":
                 openComputer();
                 break;
-            case 4:
+            case "4":
                 dailyIncome.income += offComputer();
                 break;
-            case 5:
+            case "5":
                 editComputer();
                 break;
-            case 6:
+            case "6":
                 deleteComputer();
                 break;
-            case 7:
+            case '7':
                 priceEdit();
                 break;
-            case 8:
+            case '8':
                 addAccount();
                 break;
-            case 9:
+            case "9":
                 turnover();
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Wrong then re-enter");
                 break;
         }
-    } while (choice != 0);
+    } while (choice != "0");
 }
 function showComputer() {
     console.log(listComputerManagement.show());
@@ -125,17 +126,17 @@ function deleteComputer() {
         var choice = void 0;
         do {
             console.log(menuDelete);
-            choice = +input.question("Enter selection: ");
+            choice = input.question("Enter selection: ");
             switch (choice) {
-                case 1:
+                case "1":
                     listComputerManagement["delete"](idDelete);
                     showComputer();
                     console.log("Deleted successfully!");
                     break;
-                case 0:
+                case "0":
                     break;
             }
-        } while (choice != 0);
+        } while (choice != "0");
     }
 }
 function editComputer() {
@@ -154,9 +155,9 @@ function openComputer() {
     var choice;
     do {
         console.log(menu);
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 var idOpen = +input.question("Enter the device id you want to open: ");
                 if (listComputerManagement.findById(idOpen) == -1) {
                     console.log("Id does not exist!");
@@ -174,7 +175,7 @@ function openComputer() {
                     }
                 }
                 break;
-            case 2:
+            case "2":
                 var idAdd = +input.question("Machine id add service: ");
                 if (listComputerManagement.findById(idAdd) == -1) {
                     console.log("Id does not exist!");
@@ -210,13 +211,13 @@ function openComputer() {
                     return dailyIncome.income += priceService;
                 }
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Entered wrong, enter again");
                 break;
         }
-    } while (choice != 0);
+    } while (choice != "0");
 }
 function offComputer() {
     var totalMoney = 0;
@@ -237,7 +238,7 @@ function offComputer() {
             var totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 60000;
             var totalMoney_1 = totalTime * price + priceService;
             console.log("Used Time: " + totalTime + " minute ");
-            console.log("Total amount: " + totalMoney_1 + "VND");
+            console.log("Total amount: " + totalMoney_1 + "USD");
             return totalMoney_1;
         }
     }
@@ -252,32 +253,47 @@ function addAccount() {
     var choice1;
     do {
         console.log(menuAccount);
-        choice1 = +input.question("Enter selection: ");
+        choice1 = input.question("Enter selection: ");
         switch (choice1) {
-            case 1:
+            case "1":
                 var id1 = +input.question("Enter user id: ");
-                var name1 = input.question("Enter user name: ");
-                var pass1 = input.question("Enter user pass: ");
-                var user = new account_1.Account(id1, name1, pass1);
-                listAccountManagement.add(user);
+                if (listAccountManagement.findById(id1) == -1) {
+                    var name1 = input.question("Enter user name: ");
+                    var pass1 = input.question("Enter user pass: ");
+                    var user = new account_1.Account(id1, name1, pass1);
+                    listAccountManagement.add(user);
+                }
+                else {
+                    console.log("id already exists, please re-enter");
+                }
                 break;
-            case 2:
+            case "2":
                 var id2 = +input.question("The account id you want to edit: ");
-                var name2 = input.question("New name: ");
-                var pass2 = input.question("New pass: ");
-                listAccountManagement.edit(id2, new account_1.Account(id2, name2, pass2));
+                if (listAccountManagement.findById(id2) == -1) {
+                    console.log("id does not exist, please re-enter");
+                }
+                else {
+                    var name2 = input.question("New name: ");
+                    var pass2 = input.question("New pass: ");
+                    listAccountManagement.edit(id2, new account_1.Account(id2, name2, pass2));
+                }
                 break;
-            case 3:
+            case "3":
                 var id3 = +input.question("The account id you want to delete: ");
-                listAccountManagement["delete"](id3);
+                if (listAccountManagement.findById(id3) == -1) {
+                    console.log("id does not exist, please re-enter");
+                }
+                else {
+                    listAccountManagement["delete"](id3);
+                }
                 break;
-            case 4:
+            case "4":
                 listAccountManagement.show();
                 break;
-            case 0:
+            case "0":
                 break;
         }
-    } while (choice1 != 0);
+    } while (choice1 != "0");
 }
 function turnover() {
     console.log("Revenue up to now: ");

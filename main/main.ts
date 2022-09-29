@@ -4,6 +4,7 @@ import {Computer} from "../model/computer";
 import {ComputerManagement} from "../servike/computerManagement";
 import {ServiceManagement} from "../servike/serviceManagement";
 import {DailyIncome} from "../model/dailyIncome";
+
 let listAccountManagement: AccountManagement = new AccountManagement();
 let listComputerManagement: ComputerManagement = new ComputerManagement();
 let listServiceManagement: ServiceManagement = new ServiceManagement();
@@ -22,19 +23,20 @@ function account() {
     2. Login
     0. Log out
     `
-    let choice: number;
+    let choice: string;
     do {
         console.log(menu)
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 let id1 = +input.question("Enter new user id: ");
                 let name1 = input.question("Enter new user name: ");
                 let pass1 = input.question("Enter new user pass: ");
                 let user = new Account(id1, name1, pass1);
                 listAccountManagement.add(user);
+                console.log("added account! ")
                 break;
-            case 2:
+            case "2":
                 let userName = input.question("Enter user name: ");
                 let userPass = input.question("Enter user pass: ");
                 if (userName == "ha" && userPass == "ha12345") {
@@ -43,16 +45,16 @@ function account() {
                 if (userName == name1 && userPass == pass1) {
                     adminMenu();
                 } else {
-                    console.log("Wrong username or id, re-enter!!");
+                    console.log("Wrong username or pass, re-enter!!");
                 }
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Wrong, please re-enter");
                 break;
         }
-    } while (choice != 0);
+    } while (choice != "0");
 }
 
 function adminMenu() {
@@ -69,45 +71,45 @@ function adminMenu() {
     9. Turnover
     0. Exit
     `
-    let choice: number;
+    let choice: string;
     do {
         console.log(menu1);
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 showComputer();
                 break;
-            case 2:
+            case "2":
                 addComputer();
                 break;
-            case 3:
+            case "3":
                 openComputer();
                 break;
-            case 4:
+            case "4":
                 dailyIncome.income += offComputer();
                 break;
-            case 5:
+            case "5":
                 editComputer();
                 break;
-            case 6:
+            case "6":
                 deleteComputer();
                 break;
-            case 7:
+            case '7':
                 priceEdit();
                 break;
-            case 8:
+            case '8':
                 addAccount();
                 break;
-            case 9:
+            case "9":
                 turnover();
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Wrong then re-enter");
                 break;
         }
-    } while (choice != 0)
+    } while (choice != "0")
 }
 
 function showComputer() {
@@ -121,7 +123,7 @@ function addComputer() {
         let statusAdd = input.question("Enter machine status: ");
         listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
         let index1 = listComputerManagement.findById(idAdd);
-        if (listComputerManagement.listComputer[index1].status =="on"){
+        if (listComputerManagement.listComputer[index1].status == "on") {
             listComputerManagement.listComputer[index1].time.startTime = Date.now();
             showComputer();
         }
@@ -142,20 +144,20 @@ function deleteComputer() {
     1. Delete
     0. Exit
     `
-        let choice: number;
+        let choice: string;
         do {
             console.log(menuDelete);
-            choice = +input.question("Enter selection: ");
+            choice = input.question("Enter selection: ");
             switch (choice) {
-                case 1:
+                case "1":
                     listComputerManagement.delete(idDelete);
                     showComputer();
                     console.log("Deleted successfully!");
                     break;
-                case 0:
+                case "0":
                     break;
             }
-        } while (choice != 0);
+        } while (choice != "0");
     }
 }
 
@@ -177,12 +179,12 @@ function openComputer() {
     2. More services
     0. Exit
     `
-    let choice: number;
+    let choice: string;
     do {
         console.log(menu);
-        choice = +input.question("Enter selection: ");
+        choice = input.question("Enter selection: ");
         switch (choice) {
-            case 1:
+            case "1":
                 let idOpen = +input.question("Enter the device id you want to open: ");
                 if (listComputerManagement.findById(idOpen) == -1) {
                     console.log("Id does not exist!");
@@ -198,7 +200,7 @@ function openComputer() {
                     }
                 }
                 break;
-            case 2:
+            case "2":
                 let idAdd = +input.question("Machine id add service: ");
                 if (listComputerManagement.findById(idAdd) == -1) {
                     console.log("Id does not exist!");
@@ -231,13 +233,13 @@ function openComputer() {
                     return dailyIncome.income += priceService;
                 }
                 break;
-            case 0:
+            case "0":
                 break;
             default:
                 console.log("Entered wrong, enter again");
                 break;
         }
-    } while (choice != 0);
+    } while (choice != "0");
 }
 
 function offComputer() {
@@ -279,40 +281,56 @@ function addAccount() {
     4. Show list of accounts
     0. Exit
     `
-    let choice1: number;
+    let choice1: string;
     do {
         console.log(menuAccount);
-        choice1 = +input.question("Enter selection: ");
+        choice1 = input.question("Enter selection: ");
         switch (choice1) {
-            case 1:
+            case "1":
                 let id1 = +input.question("Enter user id: ")
-                let name1 = input.question("Enter user name: ");
-                let pass1 = input.question("Enter user pass: ");
-                let user = new Account(id1, name1, pass1);
-                listAccountManagement.add(user);
+                if (listAccountManagement.findById(id1) == -1) {
+                    let name1 = input.question("Enter user name: ");
+                    let pass1 = input.question("Enter user pass: ");
+                    let user = new Account(id1, name1, pass1);
+                    listAccountManagement.add(user);
+                } else {
+                    console.log("id already exists, please re-enter")
+
+                }
+
                 break;
-            case 2:
+            case "2":
                 let id2 = +input.question("The account id you want to edit: ");
-                let name2 = input.question("New name: ");
-                let pass2 = input.question("New pass: ");
-                listAccountManagement.edit(id2, new Account(id2, name2, pass2));
+                if (listAccountManagement.findById(id2) == -1) {
+                    console.log("id does not exist, please re-enter")
+                } else {
+                    let name2 = input.question("New name: ");
+                    let pass2 = input.question("New pass: ");
+                    listAccountManagement.edit(id2, new Account(id2, name2, pass2));
+                }
+
                 break;
-            case 3:
+            case "3":
                 let id3 = +input.question("The account id you want to delete: ");
-                listAccountManagement.delete(id3);
+                if (listAccountManagement.findById(id3) == -1) {
+                    console.log("id does not exist, please re-enter")
+                } else {
+                    listAccountManagement.delete(id3);
+
+                }
                 break;
-            case 4:
+            case "4":
                 listAccountManagement.show();
                 break;
-            case 0:
+            case "0":
                 break;
         }
-    } while (choice1 != 0);
+    } while (choice1 != "0");
 }
 
 function turnover() {
     console.log("Revenue up to now: ");
-    console.log(`${dailyIncome.date}:$${dailyIncome.income} `+"USD");
+    console.log(`${dailyIncome.date}:$${dailyIncome.income} ` + "USD");
 }
 
 account();
