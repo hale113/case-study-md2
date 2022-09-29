@@ -12,7 +12,7 @@ let price = 250;
 let priceService = 0;
 let currentDate = new Date();
 let dailyIncome = new DailyIncome();
-dailyIncome.date = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+dailyIncome.date = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 dailyIncome.income = 0;
 
 function account() {
@@ -257,7 +257,7 @@ function offComputer() {
             let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 60000;
             let totalMoney = totalTime * price + priceService;
             console.log("Used Time: " + totalTime + " minute ");
-            console.log("Total amount: " + totalMoney + "VND");
+            console.log("Total amount: " + totalMoney + "USD");
             return totalMoney;
         }
     }
