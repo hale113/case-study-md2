@@ -29,16 +29,16 @@ function account() {
         choice = input.question("Enter selection: ");
         switch (choice) {
             case "1":
-                let id1 = +input.question("Enter new user id: ");
-                let name1 = input.question("Enter new user name: ");
-                let pass1 = input.question("Enter new user pass: ");
+                let id1 = +input.question("Enter new user id:   ");
+                let name1 = input.question("Enter new user name:   ");
+                let pass1 = input.question("Enter new user pass:   ");
                 let user = new Account(id1, name1, pass1);
                 listAccountManagement.add(user);
                 console.log("added account! ")
                 break;
             case "2":
-                let userName = input.question("Enter user name: ");
-                let userPass = input.question("Enter user pass: ");
+                let userName = input.question("Enter user name:   ");
+                let userPass = input.question("Enter user pass:   ");
                 if (userName == "ha" && userPass == "ha12345") {
                     adminMenu();
                 }
@@ -59,7 +59,7 @@ function account() {
 
 function adminMenu() {
     let menu1 = `
-    ------Management menu------
+    ------Net shop management menu------
     1. Show list of computers
     2. Add a new machine
     3. Turn on the machine and Add a service
@@ -74,7 +74,7 @@ function adminMenu() {
     let choice: string;
     do {
         console.log(menu1);
-        choice = input.question("Enter selection: ");
+        choice = input.question("Enter selection:   ");
         switch (choice) {
             case "1":
                 showComputer();
@@ -117,16 +117,26 @@ function showComputer() {
 }
 
 function addComputer() {
-    let idAdd = +input.question("Enter new device id: ");
+    let idAdd = +input.question("Enter new device id:   ");
     if (listComputerManagement.findById(idAdd) == -1 && idAdd >= 0) {
-        let nameAdd = input.question("Enter new device name: ");
-        let statusAdd = input.question("Enter machine status: ");
-        listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
-        let index1 = listComputerManagement.findById(idAdd);
-        if (listComputerManagement.listComputer[index1].status == "on") {
-            listComputerManagement.listComputer[index1].time.startTime = Date.now();
+        let nameAdd = input.question("Enter new device name:   ");
+        let statusAdd = input.question("Enter machine status:   ");
+        if (statusAdd == "off") {
+            listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
+            let index1 = listComputerManagement.findById(idAdd);
+            if (listComputerManagement.listComputer[index1].status == "on") {
+                listComputerManagement.listComputer[index1].time.startTime = Date.now();
+                showComputer();
+            }
+        } else if (statusAdd == "on") {
+            listComputerManagement.add(new Computer(idAdd, nameAdd, statusAdd));
+            let index2 = listComputerManagement.findById(idAdd);
+            listComputerManagement.listComputer[index2].time.startTime = Date.now();
             showComputer();
+        } else {
+            console.log("Machine state can only be \"on\" or \"off\", re-enter")
         }
+
     } else if (idAdd >= 0) {
         console.log("Id already exists, please re-enter!");
     } else {
@@ -135,8 +145,8 @@ function addComputer() {
 }
 
 function deleteComputer() {
-    let idDelete = +input.question("Enter the id you want to delete: ");
-    if (listComputerManagement.findById(idDelete) == -1) {
+    let idDelete = +input.question("Enter the id you want to delete:  ");
+    if (listComputerManagement.findById(idDelete) == -1 && idDelete >= 0) {
         console.log("Id does not exist");
     } else {
         let menuDelete = `
@@ -147,7 +157,7 @@ function deleteComputer() {
         let choice: string;
         do {
             console.log(menuDelete);
-            choice = input.question("Enter selection: ");
+            choice = input.question("Enter selection:   ");
             switch (choice) {
                 case "1":
                     listComputerManagement.delete(idDelete);
@@ -162,13 +172,40 @@ function deleteComputer() {
 }
 
 function editComputer() {
-    let idEdit = +input.question("Enter the id you want to edit: ");
-    if (listComputerManagement.findById(idEdit) == -1) {
+    let idEdit = +input.question("Enter the id you want to edit:   ");
+    if (listComputerManagement.findById(idEdit) == -1 && idEdit > 0) {
         console.log("The id you want to fix does not exist!");
     } else {
-        let nameEdit = input.question(" Enter a new name: ");
-        let statusEdit = input.question("Enter a new status: ");
-        listComputerManagement.edit(idEdit, new Computer(idEdit, nameEdit, statusEdit));
+        let nameEdit = input.question(" Enter a new name:   ");
+        let statusEdit = input.question("Enter a new status:   ");
+        let index3 = listComputerManagement.findById(idEdit);
+        if (statusEdit == "on") {
+            if (listComputerManagement.listComputer[index3].status == "on") {
+                console.log("machine is online!!")
+            } else if (listComputerManagement.listComputer[index3].status == "off") {
+                listComputerManagement.listComputer[index3].status = "on"
+                listComputerManagement.edit(idEdit,new Computer(idEdit,nameEdit,statusEdit));
+                listComputerManagement.listComputer[index3].time.startTime = Date.now();
+                // showComputer();
+                return Date.now();
+                return showComputer();
+            }
+        } else if (statusEdit == "off") {
+           if (listComputerManagement.listComputer[index3].status == "on"){
+               listComputerManagement.listComputer[index3].status = "off";
+               listComputerManagement.edit(idEdit,new Computer(idEdit,nameEdit,statusEdit));
+               listComputerManagement.listComputer[index3].time.endTime = Date.now();
+               showComputer();
+               console.log("Closed the second machine:   " + (index3 + 1));
+               let totalTime = (listComputerManagement.listComputer[index3].time.endTime - listComputerManagement.listComputer[index3].time.startTime) / 60000;
+               let totalMoney = totalTime * price + priceService;
+               console.log("Used Time:   " + totalTime + " minute ");
+               console.log("Total amount:   " + totalMoney + "USD");
+               return totalMoney;
+           }
+        } else {
+            console.log("Machine state can only be \"on\" or \"off\", re-enter");
+        }
     }
 }
 
@@ -182,11 +219,11 @@ function openComputer() {
     let choice: string;
     do {
         console.log(menu);
-        choice = input.question("Enter selection: ");
+        choice = input.question("Enter selection:   ");
         switch (choice) {
             case "1":
-                let idOpen = +input.question("Enter the device id you want to open: ");
-                if (listComputerManagement.findById(idOpen) == -1) {
+                let idOpen = +input.question("Enter the device id you want to open:   ");
+                if (listComputerManagement.findById(idOpen) == -1 && idOpen >= 0) {
                     console.log("Id does not exist!");
                 } else {
                     let index = listComputerManagement.findById(idOpen);
@@ -201,8 +238,8 @@ function openComputer() {
                 }
                 break;
             case "2":
-                let idAdd = +input.question("Machine id add service: ");
-                if (listComputerManagement.findById(idAdd) == -1) {
+                let idAdd = +input.question("Machine id add service:   ");
+                if (listComputerManagement.findById(idAdd) == -1 && idAdd >= 0) {
                     console.log("Id does not exist!");
                 } else {
                     let index1 = listComputerManagement.findById(idAdd);
@@ -210,7 +247,7 @@ function openComputer() {
                         console.log("Machine not working!");
                     } else if (listComputerManagement.listComputer[index1].status == "on") {
                         console.log(listServiceManagement);
-                        let idService = +input.question("Enter service id: ");
+                        let idService = +input.question("Enter service id:   ");
                         if (idService >= 1 && idService <= 4) {
                             let index2 = listServiceManagement.findById(idService);
                             listComputerManagement.listComputer[index1].service.push(listServiceManagement.listService[index2]);
@@ -219,7 +256,7 @@ function openComputer() {
                                     console.log(listComputerManagement.listComputer[index1].service);
                                     for (let j = 0; j < listServiceManagement.listService.length; j++) {
                                         if (j == index2) {
-                                            console.log(listServiceManagement.listService[index2].nameService + " Price:" + listServiceManagement.listService[index2].price);
+                                            console.log(listServiceManagement.listService[index2].nameService + " Price:  " + listServiceManagement.listService[index2].price);
                                             priceService += listServiceManagement.listService[index2].price;
                                             return priceService;
                                         }
@@ -244,8 +281,8 @@ function openComputer() {
 
 function offComputer() {
     let totalMoney = 0;
-    let idOff = +input.question("Enter the id of the device you want to close: ");
-    if (listComputerManagement.findById(idOff) == -1) {
+    let idOff = +input.question("Enter the id of the device you want to close:   ");
+    if (listComputerManagement.findById(idOff) == -1 && idOff >= 0) {
         console.log("Id does not exist, please re-enter!!");
     } else {
         let index1 = listComputerManagement.findById(idOff);
@@ -255,11 +292,11 @@ function offComputer() {
             listComputerManagement.listComputer[index1].status = "off";
             listComputerManagement.listComputer[index1].time.endTime = Date.now();
             showComputer();
-            console.log("Closed the second machine: " + (index1 + 1));
+            console.log("Closed the second machine:   " + (index1 + 1));
             let totalTime = (listComputerManagement.listComputer[index1].time.endTime - listComputerManagement.listComputer[index1].time.startTime) / 60000;
             let totalMoney = totalTime * price + priceService;
-            console.log("Used Time: " + totalTime + " minute ");
-            console.log("Total amount: " + totalMoney + "USD");
+            console.log("Used Time:   " + totalTime + " minute ");
+            console.log("Total amount:   " + totalMoney + "USD");
             return totalMoney;
         }
     }
@@ -284,13 +321,13 @@ function addAccount() {
     let choice1: string;
     do {
         console.log(menuAccount);
-        choice1 = input.question("Enter selection: ");
+        choice1 = input.question("Enter selection:   ");
         switch (choice1) {
             case "1":
-                let id1 = +input.question("Enter user id: ")
-                if (listAccountManagement.findById(id1) == -1) {
-                    let name1 = input.question("Enter user name: ");
-                    let pass1 = input.question("Enter user pass: ");
+                let id1 = +input.question("Enter user id:   ")
+                if (listAccountManagement.findById(id1) == -1 && id1 >= 0) {
+                    let name1 = input.question("Enter user name:   ");
+                    let pass1 = input.question("Enter user pass:   ");
                     let user = new Account(id1, name1, pass1);
                     listAccountManagement.add(user);
                 } else {
@@ -300,8 +337,8 @@ function addAccount() {
 
                 break;
             case "2":
-                let id2 = +input.question("The account id you want to edit: ");
-                if (listAccountManagement.findById(id2) == -1) {
+                let id2 = +input.question("The account id you want to edit:   ");
+                if (listAccountManagement.findById(id2) == -1 && id2 >= 0) {
                     console.log("id does not exist, please re-enter")
                 } else {
                     let name2 = input.question("New name: ");
@@ -312,7 +349,7 @@ function addAccount() {
                 break;
             case "3":
                 let id3 = +input.question("The account id you want to delete: ");
-                if (listAccountManagement.findById(id3) == -1) {
+                if (listAccountManagement.findById(id3) == -1 && id3 >= 0) {
                     console.log("id does not exist, please re-enter")
                 } else {
                     listAccountManagement.delete(id3);
