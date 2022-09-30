@@ -239,6 +239,7 @@ function openComputer() {
                                         if (j == index2) {
                                             console.log(listServiceManagement.listService[index2].nameService + " Price:  " + listServiceManagement.listService[index2].price);
                                             priceService += listServiceManagement.listService[index2].price;
+                                            console.log("Added service to digital device:   " + index2 + 1);
                                             return priceService;
                                         }
                                     }
